@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI repos gaining stars on GitHub</title>
+<meta name="description" content="Live view of the AI, LLM and agent repositories gaining the most stars on GitHub right now.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1b2140;
+    --ink-deep: #121630;
+    --paper: #eef0f7;
+    --paper-dim: #a9afca;
+    --rule: #2f3760;
+    --star: #f2b84b;
+    --pace: #5fd4c4;
+    --pace-dim: #2c6e67;
+    --focus: #ffd98a;
+    --max: 1040px;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--ink); color: var(--paper); }
+  body {
+    margin: 0;
+    font-family: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.45;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+  header { padding: 40px 0 28px; }
+  .masthead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 28px; }
+  .masthead h1 {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    font-variation-settings: "wdth" 90;
+    letter-spacing: -0.02em;
+  }
+  .status { color: var(--paper-dim); font-size: 15px; display: flex; align-items: center; gap: 10px; }
+  .pulse {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--pace);
+    box-shadow: 0 0 0 0 rgba(95,212,196,.5);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(95,212,196,.5);} 100% { box-shadow: 0 0 0 12px rgba(95,212,196,0);} }
+  .pulse.stale { background: var(--star); animation: none; }
+
+  nav { display: flex; gap: 6px; margin-top: 28px; border-bottom: 1px solid var(--rule); }
+  nav button {
+    appearance: none; background: none; border: 0; color: var(--paper-dim);
+    font: inherit; font-weight: 600; font-size: 16px; padding: 12px 4px; margin-right: 22px; cursor: pointer;
+    border-bottom: 3px solid transparent; margin-bottom: -1px;
+  }
+  nav button[aria-selected="true"] { color: var(--paper); border-bottom-color: var(--star); }
+  nav button:hover { color: var(--paper); }
+
+  .lede {
+    margin: 36px 0 10px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px 48px;
+    align-items: end;
+  }
+  .lede .kicker { color: var(--paper-dim); font-size: 15px; margin: 0 0 6px; }
+  .lede h2 {
+    margin: 0;
+    font-size: clamp(34px, 6.5vw, 76px);
+    line-height: .98;
+    font-weight: 800;
+    font-variation-settings: "wdth" 78;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+  }
+  .lede h2 a { color: var(--star); }
+  .lede h2 a:hover { color: var(--paper); }
+  .lede p.desc { margin: 14px 0 0; max-width: 62ch; color: var(--paper); font-size: 18px; }
+  .lede .big {
+    text-align: right;
+  }
+  .lede .big .n {
+    display: block;
+    font-size: clamp(44px, 8vw, 96px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--pace);
+    font-variant-numeric: tabular-nums;
+  }
+  .lede .big .l { display: block; color: var(--paper-dim); font-size: 15px; margin-top: 4px; }
+
+  ol.board { list-style: none; margin: 0; padding: 0 0 72px; }
+  ol.board li {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 4px 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  ol.board li:nth-child(-n+3) .rank { color: var(--star); }
+  .rank { font-weight: 300; font-size: 26px; color: var(--paper-dim); font-variant-numeric: tabular-nums; line-height: 1; }
+  .name { font-weight: 700; font-size: 20px; letter-spacing: -0.01em; }
+  .name .owner { font-weight: 400; color: var(--paper-dim); }
+  .name a:hover { color: var(--star); }
+  .desc { grid-column: 2; margin: 0; color: var(--paper-dim); max-width: 70ch; font-size: 15.5px; }
+  .meta { grid-column: 2; margin: 4px 0 0; font-size: 14px; color: var(--paper-dim); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  .lang::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--lc, var(--paper-dim)); margin-right: 6px; vertical-align: 1px; }
+  .nums { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .nums .stars { font-size: 20px; font-weight: 700; color: var(--star); }
+  .nums .pace { display: block; color: var(--pace); font-size: 14px; margin-top: 2px; }
+
+  .notice { padding: 48px 0 80px; color: var(--paper-dim); max-width: 60ch; }
+  .notice strong { color: var(--paper); }
+  .notice button { font: inherit; font-weight: 600; background: var(--star); color: var(--ink-deep); border: 0; padding: 10px 18px; border-radius: 4px; cursor: pointer; margin-top: 14px; }
+
+  footer { border-top: 1px solid var(--rule); padding: 20px 0 48px; color: var(--paper-dim); font-size: 14px; }
+  footer a { text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .wrap { padding: 0 18px; }
+    header { padding-top: 28px; }
+    nav button { margin-right: 12px; font-size: 15px; }
+    .lede { grid-template-columns: 1fr; }
+    .lede .big { text-align: left; }
+    ol.board li { grid-template-columns: 34px 1fr; }
+    .nums { grid-column: 2; text-align: left; margin-top: 4px; }
+    .nums .pace { display: inline; margin-left: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="masthead">
+      <h1>AI repos gaining stars on GitHub</h1>
+      <div class="status"><span class="pulse" id="pulse"></span><span id="status">Loading</span></div>
+    </div>
+    <nav role="tablist" id="tabs">
+      <button role="tab" data-view="week" aria-selected="true">New this week</button>
+      <button role="tab" data-view="month" aria-selected="false">Hot this month</button>
+      <button role="tab" data-view="active" aria-selected="false">Established, still moving</button>
+    </nav>
+  </header>
+
+  <main id="main" aria-live="polite"></main>
+
+  <footer>
+    Reads the public GitHub search API directly from your browser, refreshing every five minutes.
+    Pace is stars divided by days since the repo was created. Ten searches a minute per network is the limit, so a shared office connection may briefly pause updates.
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const REFRESH_MS = 5 * 60 * 1000;
+  const PER_PAGE = 25;
+  // GitHub search allows at most five OR operators per query.
+  const TERMS = "ai OR llm OR agent OR agents OR rag OR gpt";
+
+  const VIEWS = {
+    week:   { days: 7,   kicker: "Created in the last seven days, most starred first",
+              q: (d) => `${TERMS} created:>${d}` },
+    month:  { days: 30,  kicker: "Created in the last thirty days, most starred first",
+              q: (d) => `${TERMS} created:>${d}` },
+    active: { days: 7,   kicker: "Over five thousand stars and pushed to in the last week",
+              q: (d) => `${TERMS} stars:>5000 pushed:>${d}` },
+  };
+
+  const LANG_COLORS = {
+    Python: "#3572a5", TypeScript: "#3178c6", JavaScript: "#f1e05a", Rust: "#dea584",
+    Go: "#00add8", "Jupyter Notebook": "#da5b0b", "C++": "#f34b7d", C: "#555555",
+    Java: "#b07219", Kotlin: "#a97bff", Swift: "#f05138", Shell: "#89e051", HTML: "#e34c26",
+  };
+
+  const state = { view: "week", data: {}, fetchedAt: {}, timer: null, tick: null };
+
+  const $main = document.getElementById("main");
+  const $status = document.getElementById("status");
+  const $pulse = document.getElementById("pulse");
+
+  const fmt = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
+  const isoDaysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+  const daysSince = (iso) => Math.max(1, (Date.now() - new Date(iso)) / 864e5);
+  const ago = (iso) => {
+    const h = (Date.now() - new Date(iso)) / 36e5;
+    if (h < 1) return "within the hour";
+    if (h < 24) return `${Math.round(h)} h ago`;
+    const d = Math.round(h / 24);
+    return d === 1 ? "yesterday" : `${d} days ago`;
+  };
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function toRow(r) {
+    return {
+      owner: r.owner.login,
+      name: r.name,
+      url: r.html_url,
+      desc: r.description || "",
+      lang: r.language,
+      stars: r.stargazers_count,
+      forks: r.forks_count,
+      created: r.created_at,
+      pushed: r.pushed_at,
+      pace: r.stargazers_count / daysSince(r.created_at),
+      topics: r.topics || [],
+    };
+  }
+
+  async function fetchView(view) {
+    const v = VIEWS[view];
+    const url = new URL("https://api.github.com/search/repositories");
+    url.searchParams.set("q", v.q(isoDaysAgo(v.days)));
+    url.searchParams.set("sort", "stars");
+    url.searchParams.set("order", "desc");
+    url.searchParams.set("per_page", String(PER_PAGE));
+    const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
+    if (res.status === 403 || res.status === 429) {
+      const reset = Number(res.headers.get("x-ratelimit-reset")) * 1000;
+      const wait = reset ? Math.max(10, Math.round((reset - Date.now()) / 1000)) : 60;
+      throw Object.assign(new Error(`GitHub is rate limiting this network. Try again in about ${wait} seconds.`), { retryIn: wait });
+    }
+    if (!res.ok) throw new Error(`GitHub answered ${res.status}. Refresh to try again.`);
+    const json = await res.json();
+    return json.items.map(toRow);
+  }
+
+  function render() {
+    const rows = state.data[state.view];
+    const v = VIEWS[state.view];
+    if (!rows) { $main.innerHTML = ""; return; }
+    if (rows.length === 0) {
+      $main.innerHTML = `<div class="notice"><strong>Nothing matched.</strong> GitHub's search index may be catching up. It will try again in five minutes.</div>`;
+      return;
+    }
+    const [top, ...rest] = rows;
+    const paceLabel = state.view === "active" ? "stars a day since it began" : "stars a day";
+    const lede = `
+      <section class="lede">
+        <div>
+          <p class="kicker">${esc(v.kicker)}</p>
+          <h2><a href="${esc(top.url)}" target="_blank" rel="noopener">${esc(top.name)}</a></h2>
+          <p class="desc">${esc(top.desc) || "No description yet."}</p>
+          <p class="meta">
+            <span>by ${esc(top.owner)}</span>
+            ${top.lang ? `<span class="lang" style="--lc:${LANG_COLORS[top.lang] || "var(--paper-dim)"}">${esc(top.lang)}</span>` : ""}
+            <span>${fmt.format(top.stars)} stars</span>
+            <span>${fmt.format(top.forks)} forks</span>
+            <span>pushed ${ago(top.pushed)}</span>
+          </p>
+        </div>
+        <div class="big"><span class="n">${fmt.format(Math.round(top.pace))}</span><span class="l">${paceLabel}</span></div>
+      </section>`;
+    const items = rest.map((r, i) => `
+      <li>
+        <span class="rank">${i + 2}</span>
+        <span class="name"><a href="${esc(r.url)}" target="_blank" rel="noopener"><span class="owner">${esc(r.owner)} /</span> ${esc(r.name)}</a></span>
+        <span class="nums"><span class="stars">${fmt.format(r.stars)}</span><span class="pace">${fmt.format(Math.round(r.pace))} a day</span></span>
+        <p class="desc">${esc(r.desc)}</p>
+        <p class="meta">
+          ${r.lang ? `<span class="lang" style="--lc:${LANG_COLORS[r.lang] || "var(--paper-dim)"}">${esc(r.lang)}</span>` : ""}
+          <span>created ${ago(r.created)}</span>
+          <span>pushed ${ago(r.pushed)}</span>
+        </p>
+      </li>`).join("");
+    $main.innerHTML = lede + `<ol class="board">${items}</ol>`;
+  }
+
+  function renderError(err) {
+    $main.innerHTML = `<div class="notice"><strong>Could not load this view.</strong><br>${esc(err.message)}<br><button id="retry">Try again now</button></div>`;
+    document.getElementById("retry").addEventListener("click", () => load(state.view, true));
+    $pulse.classList.add("stale");
+    $status.textContent = "Paused";
+  }
+
+  function updateStatus() {
+    const at = state.fetchedAt[state.view];
+    if (!at) return;
+    const mins = Math.floor((Date.now() - at) / 60000);
+    const next = Math.max(0, Math.ceil((at + REFRESH_MS - Date.now()) / 60000));
+    $status.textContent = `${mins < 1 ? "Updated just now" : `Updated ${mins} min ago`}, next in ${next} min`;
+    $pulse.classList.toggle("stale", mins > 10);
+  }
+
+  async function load(view, force = false) {
+    const fresh = state.fetchedAt[view] && Date.now() - state.fetchedAt[view] < REFRESH_MS;
+    if (fresh && !force) { render(); updateStatus(); return; }
+    if (view === state.view) $status.textContent = "Updating";
+    try {
+      state.data[view] = await fetchView(view);
+      state.fetchedAt[view] = Date.now();
+      localStorage.setItem("aitrend:" + view, JSON.stringify({ at: state.fetchedAt[view], rows: state.data[view] }));
+      if (view === state.view) { render(); updateStatus(); }
+    } catch (err) {
+      if (view === state.view) renderError(err);
+    }
+  }
+
+  function restore() {
+    for (const view of Object.keys(VIEWS)) {
+      try {
+        const cached = JSON.parse(localStorage.getItem("aitrend:" + view) || "null");
+        if (cached && Date.now() - cached.at < 6 * 36e5) { state.data[view] = cached.rows; state.fetchedAt[view] = cached.at; }
+      } catch { /* ignore bad cache */ }
+    }
+  }
+
+  document.getElementById("tabs").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-view]");
+    if (!btn) return;
+    for (const b of e.currentTarget.querySelectorAll("button")) b.setAttribute("aria-selected", String(b === btn));
+    state.view = btn.dataset.view;
+    render();
+    load(state.view);
+  });
+
+  restore();
+  render();
+  updateStatus();
+  load(state.view, true);
+  // Stagger the other views so three searches never land in the same second.
+  setTimeout(() => load("month"), 4000);
+  setTimeout(() => load("active"), 8000);
+  state.timer = setInterval(() => { for (const v of Object.keys(VIEWS)) load(v, true); }, REFRESH_MS);
+  state.tick = setInterval(updateStatus, 30000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) load(state.view); });
+})();
+</script>
+</body>
+</html>
