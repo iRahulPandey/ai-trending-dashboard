@@ -7,143 +7,180 @@
 <meta name="description" content="Live view of the AI, LLM and agent repositories gaining the most stars on GitHub right now.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1b2140;
-    --ink-deep: #121630;
-    --paper: #eef0f7;
-    --paper-dim: #a9afca;
-    --rule: #2f3760;
-    --star: #f2b84b;
-    --pace: #5fd4c4;
-    --pace-dim: #2c6e67;
-    --focus: #ffd98a;
-    --max: 1040px;
+    --desk: #ecebe6;
+    --sheet: #fbfaf7;
+    --ruled: #eeece5;
+    --margin: #d8a7a7;
+    --ink: #23252a;
+    --pencil: #6a6d75;
+    --pencil-light: #9a9ca3;
+    --rule: #dedbd2;
+    --pen: #2e4a7d;
+    --highlight: #fff1a6;
+    --focus: #2e4a7d;
+    --line: 32px;
+    --gutter: 88px;
   }
   * { box-sizing: border-box; }
-  html { background: var(--ink); color: var(--paper); }
+  html { background: var(--desk); color: var(--ink); }
   body {
     margin: 0;
-    font-family: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Literata", Georgia, "Times New Roman", serif;
     font-size: 17px;
-    line-height: 1.45;
+    line-height: var(--line);
     font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
   }
   a { color: inherit; text-decoration: none; }
-  a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+  a:hover { color: var(--pen); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
-  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+  .desk { padding: 56px 24px 96px; }
+  .sheet {
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+    background:
+      repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--line) - 1px), var(--ruled) calc(var(--line) - 1px), var(--ruled) var(--line)),
+      var(--sheet);
+    background-position: 0 56px;
+    border: 1px solid #e1dfd7;
+    box-shadow: 0 1px 2px rgba(35,37,42,.04), 0 12px 40px rgba(35,37,42,.06);
+    padding: 56px 64px 72px var(--gutter);
+  }
+  .sheet::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    left: calc(var(--gutter) - 24px);
+    width: 1px;
+    background: var(--margin);
+  }
 
-  header { padding: 40px 0 28px; }
-  .masthead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 28px; }
+  header { margin-bottom: var(--line); }
+  .date { margin: 0; color: var(--pencil); font-style: italic; font-size: 16px; }
+  .masthead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 32px; }
   .masthead h1 {
     margin: 0;
-    font-size: clamp(28px, 4vw, 40px);
-    font-weight: 700;
-    font-variation-settings: "wdth" 90;
-    letter-spacing: -0.02em;
+    font-size: 32px;
+    line-height: calc(var(--line) * 1.5);
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
-  .status { color: var(--paper-dim); font-size: 15px; display: flex; align-items: center; gap: 10px; }
-  .pulse {
-    width: 9px; height: 9px; border-radius: 50%; background: var(--pace);
-    box-shadow: 0 0 0 0 rgba(95,212,196,.5);
-    animation: pulse 2.4s ease-out infinite;
-  }
-  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(95,212,196,.5);} 100% { box-shadow: 0 0 0 12px rgba(95,212,196,0);} }
-  .pulse.stale { background: var(--star); animation: none; }
+  .status { color: var(--pencil); font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--pen); }
+  .pulse.stale { background: var(--margin); }
 
-  nav { display: flex; gap: 6px; margin-top: 28px; border-bottom: 1px solid var(--rule); }
+  nav { display: flex; flex-wrap: wrap; gap: 0 28px; border-bottom: 1px solid var(--rule); margin-top: 8px; }
   nav button {
-    appearance: none; background: none; border: 0; color: var(--paper-dim);
-    font: inherit; font-weight: 600; font-size: 16px; padding: 12px 4px; margin-right: 22px; cursor: pointer;
-    border-bottom: 3px solid transparent; margin-bottom: -1px;
+    appearance: none; background: none; border: 0; color: var(--pencil);
+    font: inherit; font-size: 16px; padding: 0 0 6px; margin-bottom: -1px; cursor: pointer;
+    border-bottom: 2px solid transparent;
   }
-  nav button[aria-selected="true"] { color: var(--paper); border-bottom-color: var(--star); }
-  nav button:hover { color: var(--paper); }
+  nav button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--pen); }
+  nav button:hover { color: var(--ink); }
 
   .lede {
-    margin: 36px 0 10px;
-    padding-bottom: 32px;
+    margin: var(--line) 0 0;
+    padding-bottom: var(--line);
     border-bottom: 1px solid var(--rule);
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 16px 48px;
+    gap: 0 48px;
     align-items: end;
   }
-  .lede .kicker { color: var(--paper-dim); font-size: 15px; margin: 0 0 6px; }
+  .lede .kicker { margin: 0; color: var(--pencil); font-style: italic; }
   .lede h2 {
     margin: 0;
-    font-size: clamp(34px, 6.5vw, 76px);
-    line-height: .98;
-    font-weight: 800;
-    font-variation-settings: "wdth" 78;
-    letter-spacing: -0.03em;
+    font-size: 44px;
+    line-height: calc(var(--line) * 2);
+    font-weight: 500;
+    letter-spacing: -0.015em;
     overflow-wrap: anywhere;
   }
-  .lede h2 a { color: var(--star); }
-  .lede h2 a:hover { color: var(--paper); }
-  .lede p.desc { margin: 14px 0 0; max-width: 62ch; color: var(--paper); font-size: 18px; }
-  .lede .big {
-    text-align: right;
+  .lede h2 a {
+    background: linear-gradient(to top, var(--highlight) 0 42%, transparent 42%);
+    padding: 0 4px;
+    margin-left: -4px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
+  .lede p.desc { margin: 0; max-width: 60ch; }
+  .lede .meta { margin: 0; }
+  .lede .big { text-align: right; padding-bottom: 2px; }
   .lede .big .n {
     display: block;
-    font-size: clamp(44px, 8vw, 96px);
+    font-size: 64px;
+    line-height: calc(var(--line) * 2);
     font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--pace);
+    color: var(--pen);
     font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
   }
-  .lede .big .l { display: block; color: var(--paper-dim); font-size: 15px; margin-top: 4px; }
+  .lede .big .l { display: block; color: var(--pencil); font-size: 15px; }
 
-  ol.board { list-style: none; margin: 0; padding: 0 0 72px; }
+  ol.board { list-style: none; margin: 0; padding: 0; }
   ol.board li {
+    position: relative;
     display: grid;
-    grid-template-columns: 44px 1fr auto;
-    gap: 4px 20px;
-    padding: 18px 0;
+    grid-template-columns: 1fr auto;
+    gap: 0 32px;
+    padding: calc(var(--line) / 2) 0;
     border-bottom: 1px solid var(--rule);
     align-items: baseline;
   }
-  ol.board li:nth-child(-n+3) .rank { color: var(--star); }
-  .rank { font-weight: 300; font-size: 26px; color: var(--paper-dim); font-variant-numeric: tabular-nums; line-height: 1; }
-  .name { font-weight: 700; font-size: 20px; letter-spacing: -0.01em; }
-  .name .owner { font-weight: 400; color: var(--paper-dim); }
-  .name a:hover { color: var(--star); }
-  .desc { grid-column: 2; margin: 0; color: var(--paper-dim); max-width: 70ch; font-size: 15.5px; }
-  .meta { grid-column: 2; margin: 4px 0 0; font-size: 14px; color: var(--paper-dim); display: flex; flex-wrap: wrap; gap: 4px 18px; }
-  .lang::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--lc, var(--paper-dim)); margin-right: 6px; vertical-align: 1px; }
-  .nums { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .nums .stars { font-size: 20px; font-weight: 700; color: var(--star); }
-  .nums .pace { display: block; color: var(--pace); font-size: 14px; margin-top: 2px; }
-
-  .notice { padding: 48px 0 80px; color: var(--paper-dim); max-width: 60ch; }
-  .notice strong { color: var(--paper); }
-  .notice button { font: inherit; font-weight: 600; background: var(--star); color: var(--ink-deep); border: 0; padding: 10px 18px; border-radius: 4px; cursor: pointer; margin-top: 14px; }
-
-  footer { border-top: 1px solid var(--rule); padding: 20px 0 48px; color: var(--paper-dim); font-size: 14px; }
-  footer a { text-decoration: underline; text-underline-offset: 3px; }
-
-  @media (max-width: 640px) {
-    body { font-size: 16px; }
-    .wrap { padding: 0 18px; }
-    header { padding-top: 28px; }
-    nav button { margin-right: 12px; font-size: 15px; }
-    .lede { grid-template-columns: 1fr; }
-    .lede .big { text-align: left; }
-    ol.board li { grid-template-columns: 34px 1fr; }
-    .nums { grid-column: 2; text-align: left; margin-top: 4px; }
-    .nums .pace { display: inline; margin-left: 12px; }
+  .rank {
+    position: absolute;
+    left: calc(var(--gutter) * -1 + 8px);
+    width: 48px;
+    text-align: right;
+    color: var(--pencil-light);
+    font-variant-numeric: tabular-nums;
+    font-size: 16px;
+    top: calc(var(--line) / 2);
   }
-  @media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+  .name { grid-column: 1; font-size: 20px; font-weight: 600; letter-spacing: -0.005em; }
+  .name .owner { font-weight: 400; color: var(--pencil); }
+  .desc { grid-column: 1; margin: 0; color: var(--pencil); max-width: 66ch; font-size: 16px; }
+  .meta { grid-column: 1; margin: 0; font-size: 14.5px; color: var(--pencil-light); display: flex; flex-wrap: wrap; gap: 0 18px; }
+  .lang::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--lc, var(--pencil-light)); margin-right: 6px; vertical-align: 0; }
+  .nums { grid-column: 2; grid-row: 1 / span 3; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; align-self: start; }
+  .nums .stars { font-size: 20px; font-weight: 600; }
+  .nums .stars small { font-size: 14px; font-weight: 400; color: var(--pencil-light); margin-left: 4px; }
+  .nums .pace { display: block; color: var(--pen); font-size: 15px; }
+
+  .notice { padding: var(--line) 0; color: var(--pencil); max-width: 60ch; }
+  .notice strong { color: var(--ink); font-weight: 600; }
+  .notice button { font: inherit; font-size: 15px; background: var(--pen); color: #fff; border: 0; padding: 6px 16px; border-radius: 3px; cursor: pointer; margin-top: 8px; line-height: 24px; }
+
+  footer { margin-top: var(--line); color: var(--pencil-light); font-size: 14.5px; max-width: 70ch; }
+
+  @media (max-width: 720px) {
+    :root { --gutter: 52px; }
+    body { font-size: 16px; }
+    .desk { padding: 16px 8px 48px; }
+    .sheet { padding: 40px 24px 48px var(--gutter); background-position: 0 40px; }
+    .sheet::before { left: calc(var(--gutter) - 16px); }
+    .masthead h1 { font-size: 26px; }
+    .lede { grid-template-columns: 1fr; }
+    .lede h2 { font-size: 32px; line-height: calc(var(--line) * 1.5); }
+    .lede .big { text-align: left; }
+    .lede .big .n { font-size: 48px; line-height: calc(var(--line) * 1.5); }
+    ol.board li { grid-template-columns: 1fr; }
+    .rank { left: calc(var(--gutter) * -1 + 8px); width: 28px; }
+    .nums { grid-column: 1; grid-row: auto; text-align: left; }
+    .nums .pace { display: inline; margin-left: 10px; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="desk">
+<div class="sheet">
   <header>
+    <p class="date" id="date"></p>
     <div class="masthead">
       <h1>AI repos gaining stars on GitHub</h1>
       <div class="status"><span class="pulse" id="pulse"></span><span id="status">Loading</span></div>
@@ -158,9 +195,10 @@
   <main id="main" aria-live="polite"></main>
 
   <footer>
-    Reads the public GitHub search API directly from your browser, refreshing every five minutes.
-    Pace is stars divided by days since the repo was created. Ten searches a minute per network is the limit, so a shared office connection may briefly pause updates.
+    This page reads the public GitHub search API from your browser and refreshes every five minutes.
+    Pace is stars divided by days since the repository was created. GitHub allows ten searches a minute per network, so a busy shared connection may briefly pause updates.
   </footer>
+</div>
 </div>
 
 <script>
@@ -182,9 +220,9 @@
   };
 
   const LANG_COLORS = {
-    Python: "#3572a5", TypeScript: "#3178c6", JavaScript: "#f1e05a", Rust: "#dea584",
+    Python: "#3572a5", TypeScript: "#3178c6", JavaScript: "#d4b400", Rust: "#b7835a",
     Go: "#00add8", "Jupyter Notebook": "#da5b0b", "C++": "#f34b7d", C: "#555555",
-    Java: "#b07219", Kotlin: "#a97bff", Swift: "#f05138", Shell: "#89e051", HTML: "#e34c26",
+    Java: "#b07219", Kotlin: "#8a5cf5", Swift: "#f05138", Shell: "#5fa33a", HTML: "#e34c26",
   };
 
   const state = { view: "week", data: {}, fetchedAt: {}, timer: null, tick: null };
@@ -193,13 +231,17 @@
   const $status = document.getElementById("status");
   const $pulse = document.getElementById("pulse");
 
+  document.getElementById("date").textContent =
+    new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date());
+
   const fmt = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
+  const timeFmt = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit" });
   const isoDaysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
   const daysSince = (iso) => Math.max(1, (Date.now() - new Date(iso)) / 864e5);
   const ago = (iso) => {
     const h = (Date.now() - new Date(iso)) / 36e5;
     if (h < 1) return "within the hour";
-    if (h < 24) return `${Math.round(h)} h ago`;
+    if (h < 24) { const n = Math.round(h); return n === 1 ? "an hour ago" : `${n} hours ago`; }
     const d = Math.round(h / 24);
     return d === 1 ? "yesterday" : `${d} days ago`;
   };
@@ -217,7 +259,6 @@
       created: r.created_at,
       pushed: r.pushed_at,
       pace: r.stargazers_count / daysSince(r.created_at),
-      topics: r.topics || [],
     };
   }
 
@@ -232,12 +273,16 @@
     if (res.status === 403 || res.status === 429) {
       const reset = Number(res.headers.get("x-ratelimit-reset")) * 1000;
       const wait = reset ? Math.max(10, Math.round((reset - Date.now()) / 1000)) : 60;
-      throw Object.assign(new Error(`GitHub is rate limiting this network. Try again in about ${wait} seconds.`), { retryIn: wait });
+      throw new Error(`GitHub is rate limiting this network. Try again in about ${wait} seconds.`);
     }
     if (!res.ok) throw new Error(`GitHub answered ${res.status}. Refresh to try again.`);
     const json = await res.json();
     return json.items.map(toRow);
   }
+
+  const langTag = (lang) => lang
+    ? `<span class="lang" style="--lc:${LANG_COLORS[lang] || "var(--pencil-light)"}">${esc(lang)}</span>`
+    : "";
 
   function render() {
     const rows = state.data[state.view];
@@ -248,7 +293,6 @@
       return;
     }
     const [top, ...rest] = rows;
-    const paceLabel = state.view === "active" ? "stars a day since it began" : "stars a day";
     const lede = `
       <section class="lede">
         <div>
@@ -257,22 +301,22 @@
           <p class="desc">${esc(top.desc) || "No description yet."}</p>
           <p class="meta">
             <span>by ${esc(top.owner)}</span>
-            ${top.lang ? `<span class="lang" style="--lc:${LANG_COLORS[top.lang] || "var(--paper-dim)"}">${esc(top.lang)}</span>` : ""}
+            ${langTag(top.lang)}
             <span>${fmt.format(top.stars)} stars</span>
             <span>${fmt.format(top.forks)} forks</span>
             <span>pushed ${ago(top.pushed)}</span>
           </p>
         </div>
-        <div class="big"><span class="n">${fmt.format(Math.round(top.pace))}</span><span class="l">${paceLabel}</span></div>
+        <div class="big"><span class="n">${fmt.format(Math.round(top.pace))}</span><span class="l">stars a day since it began</span></div>
       </section>`;
     const items = rest.map((r, i) => `
       <li>
         <span class="rank">${i + 2}</span>
         <span class="name"><a href="${esc(r.url)}" target="_blank" rel="noopener"><span class="owner">${esc(r.owner)} /</span> ${esc(r.name)}</a></span>
-        <span class="nums"><span class="stars">${fmt.format(r.stars)}</span><span class="pace">${fmt.format(Math.round(r.pace))} a day</span></span>
+        <span class="nums"><span class="stars">${fmt.format(r.stars)}<small>stars</small></span><span class="pace">${fmt.format(Math.round(r.pace))} a day</span></span>
         <p class="desc">${esc(r.desc)}</p>
         <p class="meta">
-          ${r.lang ? `<span class="lang" style="--lc:${LANG_COLORS[r.lang] || "var(--paper-dim)"}">${esc(r.lang)}</span>` : ""}
+          ${langTag(r.lang)}
           <span>created ${ago(r.created)}</span>
           <span>pushed ${ago(r.pushed)}</span>
         </p>
@@ -291,8 +335,8 @@
     const at = state.fetchedAt[state.view];
     if (!at) return;
     const mins = Math.floor((Date.now() - at) / 60000);
-    const next = Math.max(0, Math.ceil((at + REFRESH_MS - Date.now()) / 60000));
-    $status.textContent = `${mins < 1 ? "Updated just now" : `Updated ${mins} min ago`}, next in ${next} min`;
+    const next = Math.max(1, Math.ceil((at + REFRESH_MS - Date.now()) / 60000));
+    $status.textContent = `Updated ${timeFmt.format(new Date(at))}, next check in ${next} min`;
     $pulse.classList.toggle("stale", mins > 10);
   }
 
